@@ -1,4 +1,4 @@
-import { Auth } from '../../src/classes/Auth'
+import { Auth } from '../../src/helper_classes/Auth'
 
 describe('is_request_valid', () => {
     it('should not take an invalid token value', () => {

@@ -1,8 +1,10 @@
 import dotenv from 'dotenv'
-import app from "./app"
+import app from './app'
 
-dotenv.config() // load .env
+// load .env
+dotenv.config()
 
+// start the service
 app.listen(process.env.PORT, () => {
     console.log('app listening at http://localhost:' + process.env.PORT)
 })

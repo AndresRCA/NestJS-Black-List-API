@@ -1,10 +1,10 @@
 import request from "supertest"
 import app from "../src/app"
 
-describe('POST /check_phrase', () => {
+describe('POST /black_list/check_phrase', () => {
     it('should return 200 status & valid response', async () => {
         let res = await request(app)
-            .post('/check_phrase')
+            .post('/black_list/check_phrase')
             .send({ message: 'hola!' })
             .set('auth-token', process.env.AUTH_TOKEN as string)
             .expect(200)
@@ -14,10 +14,10 @@ describe('POST /check_phrase', () => {
     })
 })
 
-describe('POST /add_profanity', () => {
+describe('POST /black_list/add_profanity', () => {
     test('expect 200 status & return res.body.status = "INVALID" when user tries to add word that is already on the list', async () => {
         let res = await request(app)
-            .post('/add_profanity')
+            .post('/black_list/add_profanity')
             .send({ new_word: 'mierda' })
             .set('auth-token', process.env.AUTH_TOKEN as string)
             .expect(200)

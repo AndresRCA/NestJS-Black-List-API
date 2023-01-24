@@ -5,8 +5,6 @@ import { Request } from "express"
  */
 export class Auth {
 
-    constructor() {}
-
     /**
      * Check header 'auth-token' for validation
      * @param auth_token auth token used to validate a request (defined in .env)

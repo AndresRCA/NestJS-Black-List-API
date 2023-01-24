@@ -2,7 +2,7 @@ import Filter from  'bad-words-es'
 import { writeFile } from 'fs/promises'
 const bad_words = require('../../bad_words/bad_word_list.json')
 
-export class BlackList {
+export class BlackListService {
     private black_list: Array<string> = bad_words // add your personal list of words you want black listed here
     private filter // bad-words-es instance
     
