@@ -1,31 +1,31 @@
 import { BlackList } from './services/black-list'
-import dotenv from 'dotenv'
 import express from 'express'
 import bodyParser from 'body-parser'
+import { Auth } from './classes/Auth'
 
-dotenv.config() // load .env
-
-/*----------- Server setup -------*/
 const app = express()
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-/**
- * 
- * @param auth_token auth token used to validate a request (defined in .env)
- * @returns 
- */
-function is_request_valid(auth_token: string | string[] | undefined): boolean {
-    return (auth_token != undefined || auth_token === process.env.AUTH_TOKEN)
-}
-/*--------------------------------*/
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 /*------- Black list setup -------*/
-const black_list = new BlackList();
+const black_list = new BlackList()
 /*--------------------------------*/
 
+/*----------- Middleware setup -------*/
+/**
+ * handles authentication (check if auth-token is valid)
+ */
+app.use((req, res, next) => {
+    if (!Auth.is_request_valid(req.headers['auth-token'])) {
+        res.sendStatus(403) // invalid request
+    } else {
+        next() // auth-token is valid, proceed with request
+    }
+})
+/*------------------------------------*/
+
 app.post('/check_phrase', (req, res) => {
-    if (!is_request_valid(req.headers['auth-token']) || !req.body['message']) {
+    if (!Auth.parameter_exists(req, 'message')) {
         res.sendStatus(403) // invalid request
         return
     }
@@ -39,7 +39,7 @@ app.post('/check_phrase', (req, res) => {
 })
 
 app.post('/add_profanity', (req, res) => {
-    if (!is_request_valid(req.headers['auth-token']) || !req.body['new_word']) {
+    if (!Auth.parameter_exists(req, 'new_word')) {
         res.sendStatus(403) // invalid request
         return
     }
@@ -59,6 +59,4 @@ app.post('/add_profanity', (req, res) => {
     }
 })
 
-app.listen(process.env.PORT, () => {
-    console.log('app listening at http://localhost:' + process.env.PORT)
-})
+export default app

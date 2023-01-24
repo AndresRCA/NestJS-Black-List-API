@@ -8,6 +8,8 @@ This service receives phrases and tells the user whether they are stated as blac
 
 ## Installation
 
+This project was built with `Node 18.12.1 LTS`, so keep that in mind as you host this service on a server.
+
 To get this service up and running you have multiple choices, if you take a look at package.json there should be some scripts that should do the trick. First of all run `npm install` to install all dependencies.
 
 1. `npm run build`: as the name says, it builds your code and outputs it under the dist/ directory.
@@ -35,4 +37,4 @@ and the response to be expected should return this:
 
 ## Aditional notes
 
-If you so wish to manually add words to the black list, feel free to edit the `bad_word_list.json` under bad_words/.
+If you so wish to manually add words to the black list, feel free to edit the `bad_word_list.json` under bad_words/. Also keep in mind this list does not contain all the words that will be black listed, the library `bad-words-es` holds it's own list of black listed words that are profanities, so `bad_word_list.json` is nothing more than an addition to that.
