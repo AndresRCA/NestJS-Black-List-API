@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { BlackListService } from "../services/BlackListService.service"
+import { BlackListService } from "../services/black_list.service"
 import { Auth } from "../helper_classes/Auth"
 
 const black_list = new BlackListService()

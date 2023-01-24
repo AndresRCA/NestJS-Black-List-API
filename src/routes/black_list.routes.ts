@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { BlackListController } from "../controllers/BlackListController.controller"
+import { BlackListController } from "../controllers/black_list.controller"
 
 const router = Router()
 
