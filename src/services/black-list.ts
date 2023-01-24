@@ -4,10 +4,19 @@ const bad_words = require('../../bad_words/bad_word_list.json')
 
 export class BlackList {
     private black_list: Array<string> = bad_words // add your personal list of words you want black listed here
-    public filter // bad-words-es instance
+    private filter // bad-words-es instance
     
     constructor() {
         this.filter = new Filter({ languages: ['es'], list: [...this.black_list] })
+    }
+
+    /**
+     * Checks whether the word provided is black listed or not
+     * @param word word to be tested
+     * @returns whether the word provided is black listed or not
+     */
+    public is_black_listed(word: string): boolean {
+        return this.filter.isProfane(word)
     }
 
     /**

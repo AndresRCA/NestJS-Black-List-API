@@ -10,10 +10,10 @@ export class Auth {
     /**
      * Check header 'auth-token' for validation
      * @param auth_token auth token used to validate a request (defined in .env)
-     * @returns 
+     * @returns false if passed value is not valid
      */
     static is_request_valid(auth_token: string | string[] | undefined): boolean {
-        return (auth_token !== undefined || auth_token === process.env.AUTH_TOKEN)
+        return (auth_token !== undefined && auth_token === process.env.AUTH_TOKEN)
     }
 
     /**

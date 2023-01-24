@@ -30,7 +30,7 @@ app.post('/check_phrase', (req, res) => {
         return
     }
 
-    let msgIsProfane: boolean = black_list.filter.isProfane(req.body.message)
+    let msgIsProfane: boolean = black_list.is_black_listed(req.body.message)
     if (msgIsProfane) { 
         res.json({ message: 'Your text contains a black listed word', is_black_listed: true })
     } else {
@@ -45,7 +45,7 @@ app.post('/add_profanity', (req, res) => {
     }
 
     let new_word: string = req.body['new_word']
-    if (!black_list.filter.isProfane(new_word)) { // if the new word is not profane, that means it's not on the list
+    if (!black_list.is_black_listed(new_word)) { // if the new word is not profane, that means it's not on the list
         black_list.add_new_profanity(new_word)
             .then((success_msg: string) => {
                 res.json({ status: 'OK', message: success_msg })
