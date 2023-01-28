@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { BlackListService } from "../services/black_list.service"
-import { Auth } from "../helper_classes/Auth"
+import { validationResult } from "express-validator"
 
 const black_list = new BlackListService()
 
@@ -16,10 +16,9 @@ export class BlackListController {
      * @returns 
      */
     static check_phrase(req: Request, res: Response) {
-        if (!Auth.parameter_exists(req, 'message')) {
-            res.sendStatus(403) // invalid request
-            return
-        }
+        // validation check
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() }) // invalid body
     
         let msgIsProfane: boolean = black_list.is_black_listed(req.body.message)
         if (msgIsProfane) { 
@@ -36,10 +35,9 @@ export class BlackListController {
      * @returns 
      */
     static add_profanity(req: Request, res: Response) {
-        if (!Auth.parameter_exists(req, 'new_word')) {
-            res.sendStatus(403) // invalid request
-            return
-        }
+        // validation check
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() }) // invalid body
     
         let new_word: string = req.body['new_word']
         if (!black_list.is_black_listed(new_word)) { // if the new word is not profane, that means it's not on the list
