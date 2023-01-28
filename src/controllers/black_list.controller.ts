@@ -23,9 +23,9 @@ export class BlackListController {
     
         let msgIsProfane: boolean = black_list.is_black_listed(req.body.message)
         if (msgIsProfane) { 
-            res.json({ message: 'Your text contains a black listed word', is_black_listed: true })
+            res.json({ is_black_listed: true })
         } else {
-            res.json({ message: 'Your text does not contain a black listed word', is_black_listed: false })
+            res.json({ is_black_listed: false })
         }
     }
 
@@ -45,14 +45,14 @@ export class BlackListController {
         if (!black_list.is_black_listed(new_word)) { // if the new word is not profane, that means it's not on the list
             black_list.add_new_profanity(new_word)
                 .then((success_msg: string) => {
-                    res.json({ status: 'OK', message: success_msg })
+                    res.json({ message: success_msg })
                 })
                 .catch((e) => {
                     console.log(e)
-                    res.json({ status: 'INVALID', message: 'There was a problem adding your word to our black list' })
+                    res.json({ error: { message: 'There was a problem adding your word to our black list' } })
                 })
         } else {
-            res.json({ status: 'INVALID', message: 'That word is already in the black list' })
+            res.json({ error: { message: 'That word is already in the black list' } })
         }
     }
 }

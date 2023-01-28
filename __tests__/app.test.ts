@@ -1,6 +1,7 @@
 import request from "supertest"
 import app from "../src/app"
 
+/*-------------------------------- /black_list service --------------------------------------- */
 describe('/black_list routes', () => {
     describe('POST /check_phrase', () => {
         it('should return 200 status & valid response', async () => {
@@ -16,7 +17,7 @@ describe('/black_list routes', () => {
     })
     
     describe('POST /add_profanity', () => {
-        test('expect 200 status & return res.body.status = "INVALID" when user tries to add word that is already on the list', async () => {
+        test('expect 200 status & error in body when user tries to add word that is already on the list', async () => {
             let res = await request(app)
                 .post('/black_list/add_profanity')
                 .send({ new_word: 'mierda' })
@@ -24,7 +25,8 @@ describe('/black_list routes', () => {
                 .expect(200)
     
             // if expect(200) had no problems, now check the response body parameters
-            expect(res.body.status).toBe('INVALID')
+            expect(res.body.error).toBeDefined()
         })
     })
 })
+/*-------------------------------------------------------------------------------------------- */

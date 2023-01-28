@@ -26,17 +26,23 @@ This project may have more than one service, therefore there are as many base ro
 * `POST '/check_phrase'`: receives phrases and tells the user whether they are stated as black listed or not. The body for this request should be `{ message: "your message to be checked" }` and the response to be expected should return this:
 ```typescript
 {
-  message: string,
   is_black_listed: boolean
 }
 ```
 
 * `POST '/add_profanity'`: receives words or phrases and adds them to the black list. The body for this request should be `{ new_word: "the word you want to add" }`
-and the response to be expected should return this:
+and the response should return this:
 ```typescript
+// success
 {
-  status: "OK" | "INVALID",
-  message: "success or error message"
+  message: string
+}
+
+// error
+{
+  error: {
+    message: string
+  }
 }
 ```
 ## Testing
@@ -47,7 +53,7 @@ The structure of `__tests__` should mimic that of `src`, every file that has a c
 
 ## Aditional notes
 
-* If you so wish to manually add words to the black list, feel free to edit the `bad_word_list.json` under bad_words/. Also keep in mind this list does not contain all the words that will be black listed, the library `bad-words-es` holds it's own list of black listed words that are profanities, so `bad_word_list.json` is nothing more than an addition to that.
+* If you so wish to manually add words to the black list, feel free to edit the `bad_word_list.json` under `bad_words/`. Also keep in mind this list does not contain all the words that will be black listed, the library `bad-words-es` holds it's own list of black listed words that are profanities, so `bad_word_list.json` is nothing more than an addition to that.
 * If you'd like to add a new service to this project, define your service logic in the `services/` folder, your routes at `routes/`, and the functions you use for your routes at `controller/`. Ultimately the router object for your service should be exported to `app.ts` where the express server like so:
 ```typescript
 // black list example
