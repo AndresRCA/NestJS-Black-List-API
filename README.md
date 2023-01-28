@@ -1,101 +1,73 @@
-# Black List Service
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+</p>
 
-## This service's function
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-This service receives phrases and tells the user whether they are stated as black listed or not. What constitutes a black listed word or phrase is whether they are a profanity. The user may also be able to add a new word to the black list.
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-> **IMPORTANT**: to establish a communication with this service, the client MUST add to his HTTP request headers the header "auth-token", the value should also be the same as the one defined in the .env file, otherwise your request WILL be rejected and a 403 status code will be returned.
+## Description
+
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
 
-This project was built with `Node 18.12.1 LTS`, so keep that in mind as you host this service on a server.
-
-To get this service up and running you have multiple choices, if you take a look at package.json there should be some scripts that should do the trick. First of all run `npm install` to install all dependencies.
-
-1. `npm run build`: as the name says, it builds your code and outputs it under the dist/ directory.
-2. `npm run dev`: runs your project on typescript with the help of `ts-node`, provides hot reloading.
-3. `npm run start`: builds your project at `dist/` and starts your service.
-> 4. `npm run test`: important to run before deploying your code, uses jest and supertest for unit testing and API endpoint testing
-
-## Routes
-
-This project may have more than one service, therefore there are as many base routes as many services there are. For example we have the Black List service, the base route for that service would be `/black_list` while the service's endpoints would be `/black_list/check_phrase`, `/black_list/add_profanity`, and so on...
-
-> Take into account that the server responses defined in the tables below refer to Successful responses (http status code 200 – 299), it is what one would call the "expected" response. Responses other than that such as errors will not be documented here as the nature of such responses depends on 
-
-### For Black List Service `root_route='/black_list'`
-
-<table>
-<tr>
-<td>Route</td>
-<td>User Request</td>
-<td>Server Response</td>
-</tr>
-<tr>
-<td>
-
-`POST /check_phrase`: receives phrases and tells the user whether they are stated as black listed or not.
-</td>
-<td>
-
-```typescript
-{
-  message: string // message to be checked
-}
+```bash
+$ npm install
 ```
-</td>
-<td>
 
-```typescript
-{  
-  is_black_listed: boolean
-}
+## Running the app
+
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
-</td>
-</tr>
-<tr>
-<td>
 
-`POST /add_profanity`: receives words or phrases and adds them to the black list.
-</td>
-<td>
+## Test
 
-```typescript
-{
-  new_word: string // the word you want to add
-}
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
 ```
-</td>
-<td>
 
-```typescript
-// success
-{
-  message: string
-}
+## Support
 
-// error (could not add a new word)
-{
-  error: {
-    message: string
-  }
-}
-```
-</td>
-</tr>
-</table>
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Testing
+## Stay in touch
 
-Before deploying your changes to production, it is advised to first run `npm run test`, as doing so will tell you whether your code is viable for production. Of course it is recommended that collaborators that work on this project should also contribute by adding new tests for new features that would be worked upon, these new tests should be saved at the `__tests__` folder.
+- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-The structure of `__tests__` should mimic that of `src`, every file that has a class or a function should have their corresponding test file if it plays a vital role on the functionality of the project, that is how you mantain a healthy code base and collaborative working environment.
+## License
 
-## Aditional notes
-
-* If you so wish to manually add words to the black list, feel free to edit the `bad_word_list.json` under `bad_words/`. Also keep in mind this list does not contain all the words that will be black listed, the library `bad-words-es` holds it's own list of black listed words that are profanities, so `bad_word_list.json` is nothing more than an addition to that.
-* If you'd like to add a new service to this project, define your service logic in the `services/` folder, your routes at `routes/`, and the functions you use for your routes at `controller/`. Ultimately the router object for your service should be exported to `app.ts` where the express server like so:
-```typescript
-// black list example
-app.use('/black_list', black_list_routes)
-```
+Nest is [MIT licensed](LICENSE).
