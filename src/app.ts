@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import bodyParser from 'body-parser'
-import { router as black_list_routes } from "./routes/black_list.routes"
+import { router as black_list_routes } from './routes/black_list.routes'
+import { request_logger } from './middleware/logger.middleware'
 import { validate_auth_token } from './middleware/check_auth.middleware'
 import { header } from 'express-validator'
 import helmet from 'helmet'
@@ -12,6 +13,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 // setup the middleware functions
+// request logger
+app.use(request_logger())
+// token validation
 app.use(
     header('auth-token')
         .exists().withMessage('the header "auth-token" must be defined')

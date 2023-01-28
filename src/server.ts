@@ -1,8 +1,8 @@
 import dotenv from 'dotenv'
-import app from './app'
-
-// load .env
+// at the beginning of everything, load .env
 dotenv.config()
+
+import app from './app'
 
 // start the service
 app.listen(process.env.PORT, () => {
