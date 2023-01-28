@@ -4,7 +4,7 @@
 
 This service receives phrases and tells the user whether they are stated as black listed or not. What constitutes a black listed word or phrase is whether they are a profanity. The user may also be able to add a new word to the black list.
 
-> **IMPORTANT**: to establish a communication with this service, the client MUST add to his HTTP request headers the header "auth-token", the value should also be the same as the one defined at the .env file, otherwise your request WILL be rejected and a 403 status code will be returned.
+> **IMPORTANT**: to establish a communication with this service, the client MUST add to his HTTP request headers the header "auth-token", the value should also be the same as the one defined in the .env file, otherwise your request WILL be rejected and a 403 status code will be returned.
 
 ## Installation
 
@@ -21,7 +21,9 @@ To get this service up and running you have multiple choices, if you take a look
 
 This project may have more than one service, therefore there are as many base routes as many services there are. For example we have the Black List service, the base route for that service would be `/black_list` while the service's endpoints would be `/black_list/check_phrase`, `/black_list/add_profanity`, and so on...
 
-### For Black List Service `/black_list`
+> Take into account that the server responses defined in the tables below refer to Successful responses (http status code 200 – 299), it is what one would call the "expected" response. Responses other than that such as errors will not be documented here as the nature of such responses depends on 
+
+### For Black List Service `root_route='/black_list'`
 
 <table>
 <tr>

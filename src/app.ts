@@ -9,20 +9,22 @@ import cors from 'cors'
 import rateLimit from 'express-rate-limit'
 
 const app = express()
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+// disable header that indicates the server is running on Express
+app.disable('x-powered-by')
 
 // setup the middleware functions
 // request logger
 app.use(request_logger())
+// json body parser for POST requests
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 // token validation
 app.use(
     header('auth-token')
         .exists().withMessage('the header "auth-token" must be defined')
-        .equals(process.env.AUTH_TOKEN as string).withMessage('auth-token header must be a proper value'),
+        .equals(process.env.AUTH_TOKEN as string).withMessage('auth-token header must have a proper value'),
     validate_auth_token
 )
-
 // setup security and access measures
 app.use(helmet())
 app.use(cors({ origin: '*' }))
@@ -35,7 +37,7 @@ app.use(rateLimit({
 }))
 
 /**
- * this route can also be used to testing purposes, like middleware functions
+ * this route can also be used for testing purposes, like against middleware functions
  */
 app.get('/', (req: Request, res: Response) => {
     res.send('API Version 1.0.0')
