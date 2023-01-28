@@ -23,28 +23,66 @@ This project may have more than one service, therefore there are as many base ro
 
 ### For Black List Service `/black_list`
 
-* `POST '/check_phrase'`: receives phrases and tells the user whether they are stated as black listed or not. The body for this request should be `{ message: "your message to be checked" }` and the response to be expected should return this:
+<table>
+<tr>
+<td>Route</td>
+<td>User Request</td>
+<td>Server Response</td>
+</tr>
+<tr>
+<td>
+
+`POST /check_phrase`: receives phrases and tells the user whether they are stated as black listed or not.
+</td>
+<td>
+
 ```typescript
 {
+  message: string // message to be checked
+}
+```
+</td>
+<td>
+
+```typescript
+{  
   is_black_listed: boolean
 }
 ```
+</td>
+</tr>
+<tr>
+<td>
 
-* `POST '/add_profanity'`: receives words or phrases and adds them to the black list. The body for this request should be `{ new_word: "the word you want to add" }`
-and the response should return this:
+`POST /add_profanity`: receives words or phrases and adds them to the black list.
+</td>
+<td>
+
+```typescript
+{
+  new_word: string // the word you want to add
+}
+```
+</td>
+<td>
+
 ```typescript
 // success
 {
   message: string
 }
 
-// error
+// error (could not add a new word)
 {
   error: {
     message: string
   }
 }
 ```
+</td>
+</tr>
+</table>
+
 ## Testing
 
 Before deploying your changes to production, it is advised to first run `npm run test`, as doing so will tell you whether your code is viable for production. Of course it is recommended that collaborators that work on this project should also contribute by adding new tests for new features that would be worked upon, these new tests should be saved at the `__tests__` folder.
