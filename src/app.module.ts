@@ -9,10 +9,10 @@ import * as Joi from 'joi'
       isGlobal: true, // this module will not need to be imported in other places
       validationSchema: Joi.object({ // validate .env variables
         NODE_ENV: Joi.string()
-          .valid('development', 'production', 'test', 'provision')
+          .valid('development', 'production')
           .default('development'),
-        PORT: Joi.number().default(3000),
-      }),
+        PORT: Joi.number().default(3000)
+      })
     })
   ],
   controllers: [AppController]
