@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
+import { BlackListModule } from './black-list/black-list.module';
 import * as Joi from 'joi'
 
 @Module({
@@ -13,7 +14,8 @@ import * as Joi from 'joi'
           .default('development'),
         PORT: Joi.number().default(3000)
       })
-    })
+    }),
+    BlackListModule
   ],
   controllers: [AppController]
 })
