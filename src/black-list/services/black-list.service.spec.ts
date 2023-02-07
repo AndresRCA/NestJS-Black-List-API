@@ -1,18 +1,19 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { BlackListService } from './black-list.service';
+import { Test, TestingModule } from '@nestjs/testing'
+import { BlackListService } from './black-list.service'
+import { BlackListModule } from '../black-list.module'
 
 describe('BlackListService', () => {
-  let service: BlackListService;
+  let service: BlackListService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [BlackListService],
-    }).compile();
+      imports: [BlackListModule]
+    }).compile()
 
-    service = module.get<BlackListService>(BlackListService);
+    service = module.get<BlackListService>(BlackListService)
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(service).toBeDefined()
   });
 });

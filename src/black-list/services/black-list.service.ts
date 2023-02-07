@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Filter from 'bad-words'
-import { readFile, writeFile } from 'fs/promises'
-import { join } from 'path';
+import { writeFile } from 'fs/promises'
 
 @Injectable()
 export class BlackListService {
@@ -9,14 +8,9 @@ export class BlackListService {
   private filter: Filter // bad-words instance
   
   constructor() {
-    readFile(join(process.cwd(), './bad_words/bad_word_list.json'))
-      .then((data) => {
-        this.blackList = JSON.parse(data.toString())
-        this.filter = new Filter({ emptyList: true, list: [...this.blackList] })
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    this.blackList = require('../../../bad_words/bad_word_list.json')
+    this.filter = new Filter({ emptyList: true }) // start with an empty list
+    this.filter.addWords(...this.blackList) // populate the black list with your own bad_word_list.json
   }
 
   /**
