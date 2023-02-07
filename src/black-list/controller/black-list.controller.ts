@@ -1,7 +1,7 @@
 import { Body, Controller, Get, InternalServerErrorException, Param, Post } from '@nestjs/common'
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger'
 import { AddProfanityDto } from '../dto/black-list.dto'
-import { BadRequestBodyResponse, AddProfanityResponse, CheckPhraseResponse } from '../reponses/black-list.response'
+import { AddProfanityResponse, CheckPhraseResponse } from '../reponses/black-list.response'
 import { BlackListService } from '../services/black-list.service'
 
 @ApiTags('black-list')
@@ -27,7 +27,7 @@ export class BlackListController {
    */
   @Post('add-profanity')
   @ApiCreatedResponse({ type: AddProfanityResponse })
-  @ApiBadRequestResponse({ description: 'Bad request.', type: BadRequestBodyResponse })
+  @ApiBadRequestResponse({ description: 'Bad request.' })
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   async addProfanity(@Body() payload: AddProfanityDto): Promise<AddProfanityResponse> {

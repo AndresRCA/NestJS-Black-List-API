@@ -1,9 +1,3 @@
-export class BadRequestBodyResponse {
-  statusCode: 400
-  error: "Bad Request"
-  message: string[]
-}
-
 export class CheckPhraseResponse {
   is_black_listed: boolean
 }

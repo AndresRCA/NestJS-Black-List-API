@@ -38,4 +38,4 @@ lerna-debug.log*
 .env
 
 # other
-bad_words/bad_word_list.json
+/bad_words/bad_word_list.json
