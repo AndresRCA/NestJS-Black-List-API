@@ -2,9 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication, ValidationPipe } from '@nestjs/common'
 import request from 'supertest'
 import { BlackListModule } from '../src/black-list/black-list.module'
+import { BlackListService } from '../src/black-list/services/black-list.service'
 
 describe('BlackListController (e2e)', () => {
   let app: INestApplication
+  let blackListService: BlackListService
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -19,39 +21,28 @@ describe('BlackListController (e2e)', () => {
       })
     )
     await app.init()
+
+    blackListService = moduleFixture.get<BlackListService>(BlackListService)
   })
 
-  describe('/black-list/check-phrase (POST)', () => {
+  describe('/black-list/check-phrase/:message (GET)', () => {
     it('should return 200 status & valid response', async () => {
+      jest.spyOn(blackListService, 'isBlackListed').mockImplementation(() => false)
+
       let res = await request(app.getHttpServer())
-        .post('/black-list/check-phrase')
-        .send({ message: 'hola!' })
+        .post('/black-list/check-phrase/hola!')
         .set('X-Auth-Key', process.env.AUTH_KEY as string)
         .expect(200)
 
       // if expect(200) had no problems, now check the response body parameters
       expect(res.body.is_black_listed).toBe(false)
     })
-
-    it('should not accept invalid post body', async () => {
-      await request(app.getHttpServer())
-        .post('/black-list/check-phrase')
-        .send({ invalid_parameter_name: 'hola!' })
-        .set('X-Auth-Key', process.env.AUTH_KEY as string)
-        .expect(400)
-    })
-
-    it('should not accept a null value in post body', async () => {
-      await request(app.getHttpServer())
-        .post('/black-list/check-phrase')
-        .send({ message: null })
-        .set('X-Auth-Key', process.env.AUTH_KEY as string)
-        .expect(400)
-    })
   })
   
   describe('/black-list/add-profanity (POST)', () => {
     test('expect 201 status & error in body when user tries to add word that is already on the list', async () => {
+      jest.spyOn(blackListService, 'isBlackListed').mockImplementation(() => true)
+      
       let res = await request(app.getHttpServer())
         .post('/black-list/add-profanity')
         .send({ new_word: 'mierda' })
@@ -59,7 +50,7 @@ describe('BlackListController (e2e)', () => {
         .expect(201)
 
       // if expect(200) had no problems, now check the response body parameters
-      expect(res.body.error).toBeDefined() // error here is defined when a profanity could not be added, but the request was processed just fine
+      expect(res.body.fulfilled).toBe(false) // a profanity could not be added, but the request was processed just fine
     })
   })
 })

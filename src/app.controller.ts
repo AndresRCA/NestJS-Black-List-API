@@ -6,6 +6,6 @@ export class AppController {
 
   @Get()
   getRoot(): string {
-    return "API Version 2.0.0";
+    return 'API Version ' + process.env.API_VERSION
   }
 }

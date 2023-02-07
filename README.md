@@ -1,36 +1,19 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Black List Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## This service's function
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This service receives phrases and tells the user whether they are stated as black listed or not. What constitutes a black listed word or phrase is whether they are a profanity or not. The user may also be able to add new words to the black list.
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+> **IMPORTANT**: to establish a communication with this service, the client MUST add to his HTTP request headers the header "X-Auth-Key", the value should also be the same as the one defined in the `.env` file, otherwise your request WILL be rejected with a 401 status code.
 
 ## Installation
 
-```bash
-$ npm install
-```
+This project was built with `Node 18.12.1 LTS`, so keep that in mind as you host this service on a server. The following are steps to take in order to have a functioning application.
+
+1. Run `npm install` to install all dependencies.
+2. Rename your files so they don't have `.example` as a suffix (`.env.example`, `bad_words/bad_word_list.json.example`, etc...).
+3. If you have your own list of profanities you'd like to include, make sure to import your own `bad_word_list.json` for the black list service to use, or not (either way bad_words folder must exist).
+> By default the black list starts off empty, so unless you add your own list there won't be any black listed phrase in storage.
 
 ## Running the app
 
@@ -58,16 +41,104 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Routes
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+This project may have more than one service, therefore there are as many base routes as many services there are. For example we have the Black List service, the base route for that service would be `/black-list` while the service's endpoints would be `/black-list/check-phrase`, `/black-list/add-profanity`, and so on...
 
-## Stay in touch
+> Take into account that the server responses defined in the tables below refer to Successful responses (http status code 200 – 299), it is what one would call the "expected" response. Responses other than that such as errors will not be documented here as the nature of such responses varies depending on the case.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### For Black List Service `base_route='/black-list'`
 
-## License
+<table>
+<tr>
+<td>Route</td>
+<td>User Request</td>
+<td>Server Response</td>
+</tr>
+<tr>
+<td>
 
-Nest is [MIT licensed](LICENSE).
+`GET /check-phrase/:message`: receives phrases and tells the client whether they are black listed or not.
+</td>
+<td>
+Param request
+</td>
+<td>
+
+```typescript
+{  
+  is_black_listed: boolean
+}
+```
+</td>
+</tr>
+<tr>
+<td>
+
+`POST /add-profanity`: receives words or phrases and adds them to the black list.
+</td>
+<td>
+
+```typescript
+{
+  new_word: string
+}
+```
+</td>
+<td>
+
+```typescript
+// success
+{
+  message: string,
+  fulfilled: true
+}
+
+// unfulfilled request (could not add a new word)
+{
+  message: string,
+  fulfilled: false
+}
+```
+</td>
+</tr>
+</table>
+
+## Aditional notes
+
+* When sending HTTP errors to the client, for a standard response among all routes please use Nestjs built-in [exceptions](https://docs.nestjs.com/exception-filters#built-in-http-exceptions). For example:
+```typescript
+// server side
+throw new BadRequestException('Bad request error', { cause: new Error(), description: 'Some error description' })
+
+// what the client receives
+{
+  "message": "Bad request error",
+  "error": "Some error description",
+  "statusCode": 400,
+}
+```
+
+* Regarding the cause option property and the Error object, when aware of the error you can expect to receive (native system errors), you can pass that error over to the cause property of the Nestjs exceptions, like so:
+```typescript
+// DatabaseService.service.ts
+async function find(id: number): Promise<Item> {
+  try {
+    let item = await this.db.execute('...', [id])
+    return item
+  } catch (error) {
+    throw error
+  }
+}
+
+// item.controller.ts
+@Get(':id')
+example(@Param('id', ParseIntPipe) id: number) {
+  try {
+    let item = await this.databaseService.find(id)
+    return item
+  } catch (error) { // error is as type Error by this.dbService.find()
+    throw new InternalServerErrorException('Internal server error', { cause: error, description: 'There was a problem finding an item with id=' + id })
+  }
+}
+```

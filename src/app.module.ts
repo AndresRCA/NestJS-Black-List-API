@@ -8,8 +8,8 @@ import { BlackListModule } from './black-list/black-list.module';
   imports: [
     BlackListModule,
     ThrottlerModule.forRoot({
-      ttl: 60, // 60 seconds
-      limit: 20, // 20 requests per 60 seconds
+      ttl: 15 * 60, // 15 minutes seconds
+      limit: 100, // 100 max requests per 15 minutes
     })
   ],
   providers: [

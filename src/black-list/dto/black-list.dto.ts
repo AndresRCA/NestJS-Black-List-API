@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from "class-validator"
 
-export class CheckPhraseDto {
+export class AddProfanityDto {
   @IsString()
   @IsNotEmpty()
-  message: string
+  new_word: string
 }

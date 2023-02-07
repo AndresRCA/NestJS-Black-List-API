@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
 import Filter from 'bad-words'
+import { existsSync } from 'fs'
 import { writeFile } from 'fs/promises'
 
 @Injectable()
@@ -8,7 +9,8 @@ export class BlackListService {
   private filter: Filter // bad-words instance
   
   constructor() {
-    this.blackList = require('../../../bad_words/bad_word_list.json')
+    let fileExists = existsSync('./bad_words/bad_word_list.json')
+    this.blackList = fileExists ? require('../../../bad_words/bad_word_list.json') : []
     this.filter = new Filter({ emptyList: true }) // start with an empty list
     this.filter.addWords(...this.blackList) // populate the black list with your own bad_word_list.json
   }
@@ -37,6 +39,9 @@ export class BlackListService {
       await writeFile('./bad_words/bad_word_list.json', updatedList)
       return `word "${newWord}" was added successfully`
     } catch (error) {
+      // undo changes done locally
+      this.filter.removeWords(newWord)
+      this.blackList.pop()
       throw error
     }
   }
