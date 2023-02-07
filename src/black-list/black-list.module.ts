@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { BlackListController } from './black-list.controller';
+import { BlackListController } from './controller/black-list.controller';
 import { BlackListService } from './services/black-list.service';
 
 @Module({

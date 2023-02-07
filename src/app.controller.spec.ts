@@ -15,7 +15,7 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return message regarding version', () => {
-      expect(appController.getRoot()).toBe('API Version 2.0.0');
+      expect(appController.getRoot()).toBe('API Version ' + process.env.API_VERSION);
     })
   })
 })

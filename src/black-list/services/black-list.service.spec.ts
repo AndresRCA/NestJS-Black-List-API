@@ -11,9 +11,15 @@ describe('BlackListService', () => {
     }).compile()
 
     service = module.get<BlackListService>(BlackListService)
-  });
+  })
 
   it('should be defined', () => {
     expect(service).toBeDefined()
-  });
-});
+  })
+
+  describe('addNewProfanity', () => {
+    it('should add new word to the black list', () => {
+      service.addNewProfanity('hola')
+    })
+  })
+})

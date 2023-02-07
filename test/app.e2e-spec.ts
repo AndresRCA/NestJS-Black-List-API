@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
 import request from 'supertest'
 import { AppModule } from './../src/app.module'
+import { AuthKeyGuard } from '../src/guards/auth-key.guard'
 
 describe('AppController (e2e)', () => {
   let app: INestApplication
@@ -12,13 +13,20 @@ describe('AppController (e2e)', () => {
     }).compile()
 
     app = moduleFixture.createNestApplication()
+    app.useGlobalGuards(new AuthKeyGuard())
     await app.init()
   })
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('API Version 2.0.0')
+  afterAll(async () => {
+    await app.close()
+  })
+
+  describe('/ (GET)', () => {
+    it('should return status 403 when X-Auth-Header is not valid', async () => {
+      await request(app.getHttpServer())
+        .get('/')
+        .set('X-Auth-Key', 'invalid key')
+        .expect(403)
+    })
   })
 })

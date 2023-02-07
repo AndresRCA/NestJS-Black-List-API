@@ -3,6 +3,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common'
 import request from 'supertest'
 import { BlackListModule } from '../src/black-list/black-list.module'
 import { BlackListService } from '../src/black-list/services/black-list.service'
+import { AuthKeyGuard } from '../src/guards/auth-key.guard'
 
 describe('BlackListController (e2e)', () => {
   let app: INestApplication
@@ -14,6 +15,7 @@ describe('BlackListController (e2e)', () => {
     }).compile()
 
     app = moduleFixture.createNestApplication()
+    app.useGlobalGuards(new AuthKeyGuard())
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true, // remove any extra properties from incoming payload
@@ -25,16 +27,19 @@ describe('BlackListController (e2e)', () => {
     blackListService = moduleFixture.get<BlackListService>(BlackListService)
   })
 
+  afterAll(async () => {
+    await app.close()
+  })
+
   describe('/black-list/check-phrase/:message (GET)', () => {
     it('should return 200 status & valid response', async () => {
       jest.spyOn(blackListService, 'isBlackListed').mockImplementation(() => false)
 
       let res = await request(app.getHttpServer())
-        .post('/black-list/check-phrase/hola!')
+        .get('/black-list/check-phrase/hola!')
         .set('X-Auth-Key', process.env.AUTH_KEY as string)
         .expect(200)
-
-      // if expect(200) had no problems, now check the response body parameters
+        
       expect(res.body.is_black_listed).toBe(false)
     })
   })
@@ -49,7 +54,6 @@ describe('BlackListController (e2e)', () => {
         .set('X-Auth-Key', process.env.AUTH_KEY as string)
         .expect(201)
 
-      // if expect(200) had no problems, now check the response body parameters
       expect(res.body.fulfilled).toBe(false) // a profanity could not be added, but the request was processed just fine
     })
   })
